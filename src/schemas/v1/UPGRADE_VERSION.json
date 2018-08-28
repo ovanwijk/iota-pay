@@ -1,0 +1,51 @@
+{
+    "type": "object",
+    "required": [
+        "msgType",
+        "msg",
+        "signature"
+    ],
+    "properties": {
+        "msgType": {
+            "type": "string",
+            "enum": [
+                "UPGRADE_VERSION"
+            ]
+        },
+        "msg": {
+            "type": "object",
+            "required": [
+                "reference",
+                "controlIndex",
+                "timestampIndex"
+            ],
+            "properties": {
+                "reference": {
+                    "type": "string",
+                    "pattern": "^(IOTAPAY000)[A-Z9]{81}$"
+                },
+                "controlIndex": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "timestampIndex": {
+                    "type": "integer",
+                    "minimum": 1500000000000
+                }
+            },
+            "additionalProperties": false
+        },
+        "excludeFromSignature": {
+            "type": "object",
+            "required": [],
+            "properties": {
+                "controlIndex": { "enum": [true] },
+                "timestampIndex": { "enum": [true] },
+                "reference": { "enum": [true] }
+            },
+            "additionalProperties": false
+        },
+        "signature": { "type": "string" }
+    },
+    "additionalProperties": false
+}

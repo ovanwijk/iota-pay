@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "required": [
+        "msgType",
+        "msg",
+        "signature"
+    ],
+    "properties": {
+        "msgType": {
+            "type": "string",
+            "enum": [
+                "TERMINATE"
+            ]
+        },
+        "msg": {
+            "type": "object",
+            "required": ["signal"],
+            "properties": {
+                "signal": { "type": "string", "enum": ["TERMINATE"] }
+            },
+            "additionalProperties": false
+        },
+        "signature": { "type": "string" }
+    },
+    "additionalProperties": false
+}

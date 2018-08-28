@@ -1,0 +1,113 @@
+{
+    "type": "object",
+    "required": [
+        "msgType",
+        "msg",
+        "signature"
+    ],
+    "properties": {
+        "msgType": {
+            "type": "string",
+            "enum": [
+                "PAYMENT_CHANNEL"
+            ]
+        },
+        "msg": {
+            "type": "object",
+            "required": [
+                "offspringIndex",
+                "offspringReference",
+                "controlIndex",
+                "timestampIndex"
+            ],
+            "properties": {
+                "offspringIndex": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "offspringReference": {
+                    "type": "string",
+                    "pattern": "^[A-Z9]{81}$",
+                    "maxLength": 81
+                },
+                "controlIndex": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "timestampIndex": {
+                    "type": "integer",
+                    "minimum": 1500000000000
+                },
+                "validations": {
+                    "type": "array",
+                    "maxItems": 8,
+                    "items": { "$ref": "#/definitions/VALIDATION_METHOD" }
+                }
+            },
+            "additionalProperties": false
+        },
+        "excludeFromSignature": {
+            "type": "object",
+            "required": [],
+            "properties": {
+                "controlIndex": { "enum": [true] },
+                "timestampIndex": { "enum": [true] },
+                "offspringReference": { "enum": [true] },
+                "offspringIndex": { "enum": [true] },
+                "validations": { "enum": [true] }
+            },
+            "additionalProperties": false
+        },
+        "signature": { "type": "string" }
+    },
+    "additionalProperties": false,
+    "definitions": {
+
+        "VALIDATION_METHOD": {
+            "type": "object",
+            "required": [
+                "method",
+                "arguments"
+            ],
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "arguments": {
+                    "type": "array",
+                    "maxItems": 8,
+                    "items": {
+                        "anyOf": [{
+                                "type": "string",
+                                "maxLength": 50
+                            },
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "array",
+                                "maxItems": 8,
+                                "items": {
+                                    "anyOf": [
+                                        { "enum": ["AUTO1", "AUTO2", "AUTO3", "AUTO4", "AUTO5"] },
+                                        {
+                                            "type": "string",
+                                            "pattern": "(http|https):\\/\\/[a-z0-9\\.]{1,100}:[0-9]{2,5}"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": false
+        }
+    }
+}

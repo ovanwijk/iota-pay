@@ -1,0 +1,51 @@
+{
+    "name": "iota-pay-api",
+    "title": "Iota pay api",
+    "version": "0.5.1",
+    "private": false,
+    "main": "./index.js",
+    "module": "./dist/iota-pay-api.web.js",
+    "scripts": {
+        "start": "node start.js --watch",
+        "test": "mocha",
+        "build": "webpack --config webpack.config.js",
+        "watch": "webpack --config webpack.config.js --watch"
+    },
+    "keywords": [],
+    "author": {
+        "name": "Olaf van Wijk",
+        "url": "http://github.com/ovanwijk"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/ovanwijk/IotaPublicNodeSelection"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "babel-eslint": "^8.2.6",
+        "babel-loader": "^7.1.5",
+        "babel-register": "^6.26.0",
+        "eslint": "^4.19.1",
+        "eslint-loader": "^2.1.0",
+        "express": "^4.16.3",
+        "mocha": "^5.2.0",
+        "serve-static": "^1.13.2",
+        "webpack": "^4.16.5",
+        "webpack-cli": "^2.1.5"
+    },
+    "dependencies": {
+        "ajv": "^6.5.3",
+        "babel": "^6.23.0",
+        "babel-polyfill": "^6.26.0",
+        "bitcoin-ts": "^1.2.0",
+        "crypto-js": "^3.1.9-1",
+        "eventemitter": "^0.3.3",
+        "iota.crypto.js": "^0.4.2",
+        "iota.lib.js": "github:ovanwijk/iota.lib.js#master",
+        "iotapublicnodeselection": "github:ovanwijk/IotaPublicNodeSelection#master",
+        "jsrsasign": "^8.0.12",
+        "seedrandom": "^2.4.4",
+        "text-encoding": "^0.6.4",
+        "xmlhttprequest": "^1.8.0"
+    }
+}

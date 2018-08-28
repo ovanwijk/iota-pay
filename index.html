@@ -1,0 +1,161 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        var testingTime = Date.now()
+    </script>
+    <script type="text/javascript" src="dist/iota-pay-api.web.js"></script>
+
+
+    <title>Testing</title>
+</head>
+
+<body>
+
+    <div id="root"></div>
+    <script>
+        async function privateFunction() {
+            var util = IotaPayApi.IotaPayUtil;
+            var t = Date.now();
+            var iotaPAYAPI = await IotaPayApi.getNewPrivateAPI("TESTA999999999TEST999TEST999TEST999TEST999TEST999TEST9999999999999999999999999999");
+            iotaPAYAPI.addListener('INFO', function(code, ...args) {
+                console.log("INFO Code:" + code + ": ", args);
+            });
+            iotaPAYAPI.addListener('WARNING', function(code, ...args) {
+                console.log("WARNING Code:" + code + ": ", args);
+            });
+            iotaPAYAPI.addListener('ERROR', function(code, ...args) {
+                console.log("ERROR Code:" + code + ": ", args);
+            });
+            await iotaPAYAPI.init(['AUTO5']);
+            //await iotaPAYAPI.set(['http://iota.band:14265']);
+            await iotaPAYAPI.claimReference();
+            //await iotaPAYAPI.signalStopAddress("ARCHDRYPJTZSVNRISTKYVMARQJKQAFQFCPQCJHRPDLTMGVNWMSFIKBZXTKDQWMDEWQHWLANQBUUMDPTBZ");
+
+            if (!iotaPAYAPI.getHasComControl()) {
+
+                await iotaPAYAPI.updateComControl({
+                    "always": {
+                        "name": "Olaf van Wijk",
+                        "email": "o_van_wijk@hotmail.com",
+                        "website": "https://ecosystem.iota.org/projects/iota-pay"
+                    },
+                    "onError": {
+                        "email": "o_van_wijk@hotmail.com"
+                    }
+                }, {
+                    "initNodes": ["AUTO1"],
+                    "transactionNodes": ["AUTO3"]
+                })
+
+            }
+            //debugger;
+            // await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            // await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            // await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            // await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            // await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            if (!iotaPAYAPI.getHasPaymentChannel()) {
+                await iotaPAYAPI.updatePaymentChannel(1, []);
+                await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            } else {
+                await iotaPAYAPI.readOffspringReference(iotaPAYAPI.getPaymentChannel().msg.offspringReference);
+            }
+
+            //await iotaPAYAPI.signalStopAddress("GLJEWHAZKKRP9XEEYHSX9BWCWPLJXOBGZGOMGMZCTTHSLCMENKRZFVBRDZEGWVMLYRAGWJPGFOAOLHGAC");
+
+            //debugger;
+            var publicAddress =
+                console.log(await iotaPAYAPI.getPublicAddress());
+            // debugger;
+            // await iotaPAYAPI.
+            // await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            console.log("Reading all took: ", Date.now() - t)
+
+            //debugger;
+
+        }
+        //var enc = new IotaPayApi.IotaEncryption("SEED0", pay.getLib());
+        async function publicFunction() {
+            var util = IotaPayApi.IotaPayUtil;
+            var t = Date.now();
+            var iotaPAYAPI = IotaPayApi.getNewPublicAPI("IOTAPAY000KMYAAASEBEPLQRWFOWCPYWUZVXPNADTFKWQTTZLLUSYGCBSBUNYAUUQJJGKCIHRMKHUYYIUVQTYFU9DNP");
+            iotaPAYAPI.addListener('INFO', function(code, ...args) {
+                console.log("INFO Code:" + code + ": " + args);
+            });
+            iotaPAYAPI.addListener('WARNING', function(code, ...args) {
+                console.log("WARNING Code:" + code + ": " + args);
+            });
+            iotaPAYAPI.addListener('ERROR', function(code, ...args) {
+                console.log("ERROR Code:" + code + ": " + args);
+            });
+            await iotaPAYAPI.init(['AUTO3'], 10);
+            //await itoaPAYAPI. //http://emslaender.spdns.eu:14265
+            //await iotaPAYAPI.set(['http://iota.band:14265']);
+            // await iotaPAYAPI.claimReference();
+            // if (!iotaPAYAPI.getHasComControl()) {
+
+            //     await iotaPAYAPI.updateComControl({
+            //         "always": {
+            //             "name": "Olaf van Wijk",
+            //             "email": "o_van_wijk@hotmail.com",
+            //             "website": "https://ecosystem.iota.org/projects/iota-pay"
+            //         },
+            //         "onError": {
+            //             "email": "o_van_wijk@hotmail.com"
+            //         }
+            //     }, {
+            //         "initNodes": ["AUTO1"],
+            //         "transactionNodes": ["AUTO3"]
+            //     })
+
+            // }
+            // //debugger;
+            // // await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            // if (!iotaPAYAPI.getHasPaymentChannel()) {
+            //     await iotaPAYAPI.updatePaymentChannel(1, []);
+            //     await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            // } else {
+            //     await iotaPAYAPI.readOffspringReference(iotaPAYAPI.getPaymentChannel().msg.offspringReference);
+            // }
+
+
+            //debugger;
+            var publicAddress = await iotaPAYAPI.getPublicAddress();
+
+            document.getElementById("root").innerText = publicAddress.a + " " + (Date.now() - testingTime);
+            // debugger;
+            // await iotaPAYAPI.
+            // await iotaPAYAPI.generateNewAddressesOnActivePaymentChannel();
+            //console.log("Reading all took: ", Date.now() - t)
+
+            //debugger;
+
+
+        }
+
+        // var genAddresses = async function() {
+        //     var iotaPAYAPI = IotaPayApi.getNewPublicAPI("IOTAPAY000KMYAAASEBEPLQRWFOWCPYWUZVXPNADTFKWQTTZLLUSYGCBSBUNYAUUQJJGKCIHRMKHUYYIUVQTYFU9DNP");
+        //     iotaPAYAPI.addListener('INFO', function(code, ...args) {
+        //         console.log("INFO Code:" + code + ": " + args);
+        //     });
+        //     iotaPAYAPI.addListener('WARNING', function(code, ...args) {
+        //         console.log("WARNING Code:" + code + ": " + args);
+        //     });
+        //     iotaPAYAPI.addListener('ERROR', function(code, ...args) {
+        //         console.log("ERROR Code:" + code + ": " + args);
+        //     });
+        //     await iotaPAYAPI.init(['AUTO3'], 10);
+        //     var addresses = await iotaPAYAPI.pureAddressGeneration("")
+        //     debugger; //
+        // }
+        // genAddresses();
+        //privateFunction();
+        //publicFunction();
+    </script>
+
+</body>
+
+</html>

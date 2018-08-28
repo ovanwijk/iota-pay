@@ -1,0 +1,57 @@
+{
+    "type": "object",
+    "required": [
+        "msgType",
+        "msg",
+        "signature",
+        "excludeFromSignature"
+    ],
+    "properties": {
+        "msgType": {
+            "type": "string",
+            "enum": [
+                "ORIGIN"
+            ]
+        },
+        "msg": {
+            "type": "object",
+            "required": [
+                "channelName",
+                "version",
+                "method",
+                "controlIndex",
+                "publicKey",
+                "timestampIndex"
+            ],
+            "properties": {
+                "channelName": { "type": "string" },
+                "version": { "type": "integer" },
+                "method": { "type": "string" },
+                "publicKey": { "type": "string" },
+                "controlIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMaximum": 1
+                },
+                "timestampIndex": { "type": "integer", "minimum": 1500000000000 }
+            },
+            "additionalProperties": false
+        },
+        "excludeFromSignature": {
+            "type": "object",
+            "required": ["timestampIndex"],
+            "properties": {
+                "channelName": { "enum": [true] },
+                "version": { "enum": [true] },
+                "method": { "enum": [true] },
+                "controlIndex": { "enum": [true] },
+                "publicKey": { "enum": [true] },
+                "timestampIndex": { "enum": [true] }
+            },
+            "additionalProperties": false
+        },
+        "signature": { "type": "string" }
+
+    },
+    "additionalProperties": false
+}

@@ -1,0 +1,112 @@
+{
+    "type": "object",
+    "required": [
+        "msgType",
+        "msg",
+        "signature"
+    ],
+    "properties": {
+        "msgType": {
+            "type": "string",
+            "enum": [
+                "COM_CONTROL"
+            ]
+        },
+        "msg": {
+            "type": "object",
+            "required": [
+                "controlIndex",
+                "timestampIndex"
+            ],
+            "properties": {
+                "controlIndex": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "timestampIndex": {
+                    "type": "integer",
+                    "minimum": 1500000000000
+                },
+                "visuals": {
+
+                    "type": "object",
+                    "required": [
+                        "always",
+                        "onError"
+                    ],
+                    "properties": {
+                        "always": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {},
+                            "additionalProperties": {
+                                "type": "string",
+                                "maxLength": 150
+                            },
+                            "maxProperties": 8
+                        },
+                        "onError": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {},
+                            "additionalProperties": {
+                                "type": "string",
+                                "maxLength": 150
+                            },
+                            "maxProperties": 8
+                        }
+                    },
+                    "additionalProperties": false
+                },
+
+                "iotaNodes": {
+                    "type": "object",
+                    "required": [],
+                    "properties": {
+                        "initNodes": {
+                            "type": "array",
+                            "maxLength": 15,
+                            "items": {
+                                "anyOf": [
+                                    { "type": "string", "enum": ["AUTO1", "AUTO2", "AUTO3", "AUTO4", "AUTO5"] },
+                                    {
+                                        "type": "string",
+                                        "pattern": "^(http|https):\\/\\/[a-z0-9\\.]{1,100}:[0-9]{2,5}$"
+                                    }
+                                ]
+                            }
+                        },
+                        "transactionNodes": {
+                            "type": "array",
+                            "maxLength": 15,
+                            "items": {
+                                "anyOf": [
+                                    { "enum": ["AUTO1", "AUTO2", "AUTO3", "AUTO4", "AUTO5"] },
+                                    {
+                                        "type": "string",
+                                        "pattern": "(http|https):\\/\\/[a-z0-9\\.]{1,100}:[0-9]{2,5}"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "additionalProperties": false
+            }
+        },
+        "excludeFromSignature": {
+            "type": "object",
+            "required": [],
+            "properties": {
+                "controlIndex": { "enum": [true] },
+                "timestampIndex": { "enum": [true] },
+                "visuals": { "enum": [true] },
+                "iotaNodes": { "enum": [true] }
+            },
+            "additionalProperties": false
+        },
+        "signature": { "type": "string" }
+    },
+    "additionalProperties": false
+}

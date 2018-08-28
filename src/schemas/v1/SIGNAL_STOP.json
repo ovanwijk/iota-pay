@@ -1,0 +1,31 @@
+{
+    "type": "object",
+    "required": [
+        "msgType",
+        "msg",
+        "signature"
+    ],
+    "properties": {
+        "msgType": {
+            "type": "string",
+            "enum": [
+                "SIGNAL_STOP"
+            ]
+        },
+        "msg": {
+            "type": "object",
+            "required": ["signal", "address"],
+            "properties": {
+                "signal": { "type": "string", "enum": ["SIGNAL_STOP"] },
+                "address": {
+                    "type": "string",
+                    "pattern": "^[A-Z9]{81}$",
+                    "maxLength": 81
+                }
+            },
+            "additionalProperties": false
+        },
+        "signature": { "type": "string" }
+    },
+    "additionalProperties": false
+}

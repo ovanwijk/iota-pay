@@ -1,0 +1,72 @@
+{
+    "type": "object",
+    "required": [
+        "msgType",
+        "msg",
+        "signature"
+    ],
+    "properties": {
+        "msgType": {
+            "type": "string",
+            "enum": [
+                "ADD_LIST"
+            ]
+        },
+        "msg": {
+
+            "type": "object",
+            "required": [
+                "addresses",
+                "timestampIndex",
+                "offspringIndex"
+            ],
+            "properties": {
+                "timestampIndex": {
+                    "type": "integer",
+                    "minimum": 1500000000000
+                },
+                "offspringIndex": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "addresses": {
+                    "type": "array",
+                    "maxItems": 100,
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "a",
+                            "i"
+                        ],
+                        "properties": {
+                            "a": {
+                                "type": "string",
+                                "pattern": "^[A-Z9]{81}$",
+                                "maxLength": 81
+                            },
+                            "i": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 5000
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "excludeFromSignature": {
+            "type": "object",
+            "required": [],
+            "properties": {
+                "addresses": { "enum": [true] },
+                "timestampIndex": { "enum": [true] },
+                "offspringIndex": { "enum": [true] }
+            },
+            "additionalProperties": false
+        },
+        "signature": { "type": "string" }
+    },
+    "additionalProperties": false
+}
