@@ -8,7 +8,7 @@ This solution is 100% tangle based and has no central authorities and no servers
 Everyone will be free to implement this, exchanges, commerce, wallets etc.
 
 
-The reference implementation that can be used for public references like donation links can be found here:
+The reference implementation that can be used for public references like donation links will soon be uploaded here:
 https://github.com/ovanwijk/iota-pay-reference-implementation
 
 You can scan the QR code for donations or follow the link 
