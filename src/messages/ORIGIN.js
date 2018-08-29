@@ -1,6 +1,6 @@
 
 import * as util from '../iota-pay-static';
-import * as schemaValition from '../schema-validation';
+import * as schemaValidation from '../schema-validation';
 /**
  * 
  * @param {*} channelName 
@@ -31,10 +31,10 @@ export function generateMessage(channelName, publicKeyPEM, version, privateKeyPE
       //The only place where we really want to use consistent signatures.
       toReturn.signature = util.consistentSign(privateKeyPEM, pemPassword, util.getSignatureFragment(toReturn));   
      
-      if(schemaValition.validate(toReturn)){
+      if(schemaValidation.validate(toReturn)){
           return toReturn;
       }else{
-          throw schemaValition.getErrors();
+          throw schemaValidation.getErrors();
       }
 }
 
