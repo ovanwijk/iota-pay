@@ -22,7 +22,7 @@ The end goal of IOTA Pay is that the reference implementation is no longer requi
 
 # IOTA Pay technical description
 
-IOTA Pay uses ESDCA Signatures to provide a unique reference that can survive snapshots and that can be used in symbiosis of popular wallets like the Trinity Wallet.
+IOTA Pay uses ECDSA Signatures to provide a unique reference that can survive snapshots and that can be used in symbiosis of popular wallets like the Trinity Wallet.
 
 When talking about iHash() we talk about the IOTA used hashing function with an output of 81 trytes. It is used heavily throughout IOTA Pay.
 
@@ -44,22 +44,22 @@ The unique reference is an address generated in the following matter:
 
 At first an Origin message is created and signed(msgType + channelName +  publicKey +version + controlIndex).
 
-The public and private ESDCA key pair can be generated using a deterministic seeded random generator with [Origin seed] as input. This is the default behavior but keys are treated as PEM. Meaning that you are complete free to generate your own "secp256k1" keys. (These are the same keys as bitcoin )
+The public and private ECDSA key pair can be generated using a deterministic seeded random generator with [Origin seed] as input. This is the default behavior but keys are treated as PEM. Meaning that you are complete free to generate your own "secp256k1" keys. (These are the same keys as bitcoin )
 ```json
     {
       "msgType": "ORIGIN",
       "msg" : {
         "channelName" : "IOTAPAY",
         "version" : 1,
-        "method" : "ESDCA-SHA256",
-        "publicKey" : "ESDCA Public key",      
+        "method" : "ECDSA-SHA256",
+        "publicKey" : "ECDSA Public key",      
         "controlIndex" : 0,
         "timestampIndex" : 14000000
       },
       "excludeFromSignature": {
             "timestampIndex": true
         },
-      "signature" : "ESDCA signature"
+      "signature" : "ECDSA signature"
     }
 ```
     sign(msgType + channelName + publicKey + version + controlIndex)
