@@ -1,6 +1,6 @@
 
 import * as util from '../iota-pay-static';
-import * as schemaValition from '../schema-validation';
+import * as schemaValidation from '../schema-validation';
 
 /**
  * Generates a new message, it is imparitive to use the latest control message availble.
@@ -37,10 +37,10 @@ export function generateMessage(latestControlMessage, channelName, offspringInde
       }
       toReturn.signature = util.sign(privateKeyPEM, pemPassword, util.getSignatureFragment(toReturn));
 
-    if(schemaValition.validate(toReturn)){
+    if(schemaValidation.validate(toReturn)){
         return toReturn;
     }else{
-        throw schemaValition.getErrors();
+        throw schemaValidation.getErrors();
     }
 }
 
