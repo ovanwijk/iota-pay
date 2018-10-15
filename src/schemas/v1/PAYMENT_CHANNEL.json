@@ -22,8 +22,7 @@
             ],
             "properties": {
                 "offspringIndex": {
-                    "type": "integer",
-                    "minimum": 0
+                    "type": "integer"
                 },
                 "offspringReference": {
                     "type": "string",

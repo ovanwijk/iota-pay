@@ -157,11 +157,14 @@ export class TimeIndexedReference {
 
     getLatestComControlMessage() {
         if (this.activeCOMControl === null) {
+            var latestOrigin = this.getLatestOriginMessage();
+            if(latestOrigin){
             this.COMControlMessages.sort(this.sortingFunction);
-            for (var i = this.COMControlMessages.length - 1; i >= 0; i--) {
-                if (messageFunctions.COM_CONTROL.verifySignature(this.COMControlMessages[i], this.getPublicKey())) {
-                    this.activeCOMControl = this.COMControlMessages[i];
-                    break;
+                for (var i = this.COMControlMessages.length - 1; i >= 0; i--) {
+                    if (latestOrigin.msg.timestampIndex == this.COMControlMessages[i].msg.timestampIndex && messageFunctions.COM_CONTROL.verifySignature(this.COMControlMessages[i], this.getPublicKey())) {
+                        this.activeCOMControl = this.COMControlMessages[i];
+                        break;
+                    }
                 }
             }
         }
@@ -170,11 +173,15 @@ export class TimeIndexedReference {
 
     getLatestPaymentChannelMessage() {
         if (this.activePaymentChannel === null) {
-            this.paymentChannelMessages.sort(this.sortingFunction);
-            for (var i = this.paymentChannelMessages.length - 1; i >= 0; i--) {
-                if (messageFunctions.PAYMENT_CHANNEL.verifySignature(this.paymentChannelMessages[i], this.getPublicKey())) {
-                    this.activePaymentChannel = this.paymentChannelMessages[i];
-                    break;
+            var latestOrigin = this.getLatestOriginMessage();
+            if(latestOrigin){
+                this.paymentChannelMessages.sort(this.sortingFunction);
+                
+                for (var i = this.paymentChannelMessages.length - 1; i >= 0; i--) {
+                    if (latestOrigin.msg.timestampIndex == this.paymentChannelMessages[i].msg.timestampIndex &&  messageFunctions.PAYMENT_CHANNEL.verifySignature(this.paymentChannelMessages[i], this.getPublicKey())) {
+                        this.activePaymentChannel = this.paymentChannelMessages[i];
+                        break;
+                    }
                 }
             }
         }

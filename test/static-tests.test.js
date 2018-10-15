@@ -39,6 +39,33 @@ describe('ECDSA deterministic keys', function() {
         newSignature = utils.sign(keyPair.privateKey, null, signatureInfo);
     });
 
+    it('Generate correct IOTA seeds: tryte-based', function() {
+        var localSeed = testSeed;
+        assert.equal('CDTLFVMHUPZRYRPGWRRANJHUCKPCESBVL9NQJKDEXWLIU9EMKVS9CPPSX9E9QETMKVDAS9IEMBRKVARTV', 
+            utils.generateOffspringSeed(localSeed, 'IOTAPAY', 0));
+        assert.equal('GXVO99EMCZAVWPRWTR9GXKIWEWIWADTREPJBKOQAXBMBGCBJBAGJRZSSWPBI9EHVBZLKYOVTQXQKJASVK',
+             utils.generateOffspringSeed(localSeed, 'IOTAPAY', 1));
+    });
+
+    it('Generate correct IOTA seeds: non-tryte-based', function() {
+        var localSeed = testSeed + "randomNonTrytes";
+        assert.equal('YCNB9VTVMSYGHXOAFJVUZKVWOVYBMOTLFCMTBVJVFSXVFJZTTFDQRURUPK9CVLJULQSUXMIUUGCOOOONU', 
+            utils.generateOffspringSeed(localSeed, 'IOTAPAY', 0));
+        assert.equal('YJQWLDSU9JKXEZD9UASCBPIQWACQDPXNUVGRJ9FUHZCDSPBSBCKZYEQKMKDLDQMRHCELGTUTGZ9J9ISNI',
+             utils.generateOffspringSeed(localSeed, 'IOTAPAY', 1));
+    });
+    
+
+    it('Faulty seed generator generates same seed', function() {
+        //AAAA...AAAA seed was used to find the problem
+        var localSeed = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+        assert.equal('XAL9SMWRVVMYNSIIUVHXH9LBAHYHUWXRRKOTWECQULPRVVHMJXIIHAKPMZZGUFQPJNNAWBRUMZMRLFXNP', 
+            utils.faultySeedGenerator(localSeed, 'IOTAPAY', 0));
+        //The faulty generator generated the same seed over different indexes IF the origin seed was TRYTES
+        assert.equal('XAL9SMWRVVMYNSIIUVHXH9LBAHYHUWXRRKOTWECQULPRVVHMJXIIHAKPMZZGUFQPJNNAWBRUMZMRLFXNP',
+             utils.faultySeedGenerator(localSeed, 'IOTAPAY', 1));
+    });
+
     //Due to the encryption procces we cannot compare the private keys directly.
     it('key similarity', function() {        
         assert.equal(keyPair.publicKey, oldPublicKey);

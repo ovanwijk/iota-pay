@@ -206,9 +206,11 @@ class IotaPay extends EventEmitter {
             }
         return {
             totalAddresses: activeAddresses.length,
+            activeAddresses: activeAddresses,
             availableAddresses: availableAddresses,
             totalBalance: totalBalance,
             offspringSeeds: this.getOffspringSeeds(),
+            wronglyGeneratedSeed: utils.faultySeedGenerator(this.originSeed),
             activeOffspringIndex: paymentChannel.msg.offspringIndex,
             offspringReference: paymentChannel.msg.offspringReference,
             positiveBalanceAddresses: positiveBalanceAddresses,
@@ -838,6 +840,34 @@ class IotaPay extends EventEmitter {
         }
     }
 
+    async addAddresses(addresses){
+        if(await this.canPowBeDone()){
+            var currentPaymentChannel = this.getPaymentChannel();
+            if(currentPaymentChannel){           
+                var offspringReference = currentPaymentChannel.msg.offspringReference;
+               
+                var add_listMessage = messageFunctions.ADD_LIST.generateMessage(currentPaymentChannel, addresses, this.privateKeyPEM, this.pemPassword);
+                var transfer = [{
+                    address: offspringReference,
+                    value: 0,
+                    message: iotaUtils.toTrytes(JSON.stringify(add_listMessage)),
+                    tag: '9'.repeat(27)
+                }];
+                this.emitInfo(codes.SENDING_PAYMENT_CHANNEL_MESSAGE);
+            
+                var trytes = await promisifyAPI(utils.staticIOTA, "prepareTransfers",'9'.repeat(81), transfer);
+               
+                var sendTrytesResult = await this.iotaMultiNode.sendTrytesPromise(trytes, tipDepth, MWM);
+                //After sending to the Tangle update internal state
+                this.addToTimestampIndexedMap(add_listMessage);
+            }else{
+                debugger;
+            }
+        }else{
+            this.emitError(codes.NO_POW_SERVER_AVAILABLE);
+        }
+    }
+
 
     async generateAddresses(offspringIndex, startIndex = 0, count = 50){
         this.emitInfo(codes.GENERATING_ADDRESSES);
@@ -890,20 +920,8 @@ class IotaPay extends EventEmitter {
                
                 var addresses = await this.generateAddresses(offspringIndex, highestAddressIndex + 1, N);
                
-                var add_listMessage = messageFunctions.ADD_LIST.generateMessage(currentPaymentChannel, addresses, this.privateKeyPEM, this.pemPassword);
-                var transfer = [{
-                    address: offspringReference,
-                    value: 0,
-                    message: iotaUtils.toTrytes(JSON.stringify(add_listMessage)),
-                    tag: '9'.repeat(27)
-                }];
-                this.emitInfo(codes.SENDING_PAYMENT_CHANNEL_MESSAGE);
-            
-                var trytes = await promisifyAPI(utils.staticIOTA, "prepareTransfers",'9'.repeat(81), transfer);
+                await this.addAddresses(addresses);
                
-                var sendTrytesResult = await this.iotaMultiNode.sendTrytesPromise(trytes, tipDepth, MWM);
-                //After sending to the Tangle update internal state
-                this.addToTimestampIndexedMap(add_listMessage);
             }else{
                 debugger;
             }
@@ -1014,6 +1032,7 @@ class IotaPay extends EventEmitter {
         };
     }
     getOffspringSeed(index) {
+      
         return utils.generateOffspringSeed(this.originSeed, this.channelName, index);
     }
 

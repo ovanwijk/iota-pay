@@ -68,11 +68,15 @@ export function isTrytes(str) {
     return  regexTrytes.test(str);
 }
 
+export function faultySeedGenerator(originSeed){
+    return  hashTrytes(isTrytes(originSeed) ? originSeed: IotaCrypto.utils.toTrytes(originSeed));
+}
+
 export function generateOffspringSeed(originSeed, channelName, offspringIndex) {
     //If trytes don't do anything otherwise make trytes out of it.
-    return hashTrytes(isTrytes(originSeed) ? originSeed: IotaCrypto.utils.toTrytes(originSeed) +
-                      IotaCrypto.utils.toTrytes(channelName) + 
-                      IotaCrypto.utils.toTrytes(offspringIndex.toString()));
+    return hashTrytes((isTrytes(originSeed) ? originSeed: IotaCrypto.utils.toTrytes(originSeed)) +
+    IotaCrypto.utils.toTrytes(channelName) + 
+    IotaCrypto.utils.toTrytes(offspringIndex.toString()));;
 }
 
 export function generateOffspringReference(offspringSeed, channelName) {
